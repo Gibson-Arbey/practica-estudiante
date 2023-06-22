@@ -13,7 +13,9 @@ import java.time.LocalDateTime;
 
 public interface CursoRepository extends JpaRepository<CursoEntity, Integer> {
     
-    List<CursoEntity> findByHorario(LocalDateTime horario);
+    List<CursoEntity> findByHorarioInicio(LocalDateTime horario);
+
+    List<CursoEntity> findByHorarioFin(LocalDateTime horario);
 
     List<CursoEntity> findByMateriaEntity(MateriaEntity materiaEntity);
 

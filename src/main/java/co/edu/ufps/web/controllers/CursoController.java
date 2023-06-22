@@ -45,7 +45,9 @@ public class CursoController {
         JornadaEntity jornadaEntity = cursoService.buscarJornada(cursoRequest.getJornada());
         cursoEntity.setJornadaEntity(jornadaEntity);
 
-        cursoEntity.setHorario(cursoRequest.getHorario());
+        cursoEntity.setHorarioInicio(cursoRequest.getHorarioInicio());
+        cursoEntity.setHorarioFin(cursoRequest.getHorarioFin());
+        cursoEntity.setDia(cursoRequest.getDia());
         cursoEntity.setGrupo(cursoRequest.getGrupo());
         
         cursoService.guardar(cursoEntity);

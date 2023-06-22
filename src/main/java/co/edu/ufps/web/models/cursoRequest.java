@@ -1,6 +1,7 @@
 package co.edu.ufps.web.models;
 
-import java.time.LocalDateTime;
+
+import java.time.LocalTime;
 
 import lombok.Data;
 
@@ -9,7 +10,11 @@ public class cursoRequest {
     
     private String grupo;
 
-    private LocalDateTime horario;
+    private LocalTime horarioInicio;
+
+    private LocalTime horarioFin;
+
+    private String dia;
 
     private Integer jornada;
 

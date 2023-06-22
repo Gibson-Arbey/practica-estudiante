@@ -1,6 +1,7 @@
 package co.edu.ufps.web.entities;
 
-import java.time.LocalDateTime;
+
+import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,7 +40,13 @@ public class CursoEntity {
     private JornadaEntity jornadaEntity;
 
     @Column(nullable = false)
-    private LocalDateTime horario;
+    private LocalTime horarioInicio;
+
+    @Column(nullable = false)
+    private LocalTime horarioFin;
+
+    @Column(length = 9, nullable = false)
+    public String dia;
 
     @Column(length = 1, nullable = false)
     private String grupo;
