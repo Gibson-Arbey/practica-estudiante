@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,8 +40,10 @@ public class EstudianteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false)
     private String apellido;
 
     @Max(value = 5, message = "La nota1 debe ser menor o igual a 5")
@@ -71,7 +74,7 @@ public class EstudianteEntity {
 	private Integer edad;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "estudianteEntity")
+    @OneToMany(mappedBy = "estudianteEntity", cascade = CascadeType.ALL)
     private List<CursoEntity> cursos = new ArrayList<>();
 
     public Float getPromedio() {

@@ -38,8 +38,9 @@ public class CursoEntity {
     @JoinColumn(name = "jornada_id", nullable = false)
     private JornadaEntity jornadaEntity;
 
+    @Column(nullable = false)
     private LocalDateTime horario;
 
-    @Column(length = 1)
+    @Column(length = 1, nullable = false)
     private String grupo;
 }

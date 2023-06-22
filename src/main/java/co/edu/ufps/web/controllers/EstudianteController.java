@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.ufps.web.entities.EstudianteEntity;
-import co.edu.ufps.web.repositorios.EstudianteRepository;
+import co.edu.ufps.web.services.EstudianteService;
 
 @RestController
 @RequestMapping("/estudiante")
@@ -27,14 +27,14 @@ import co.edu.ufps.web.repositorios.EstudianteRepository;
 public class EstudianteController {
     
     @Autowired
-    EstudianteRepository estudianteRepository;
+    EstudianteService estudianteService;
 
     /*
      * Metodo para buscar un estudiante por su id
      */
     @GetMapping("/buscar")
     public ResponseEntity<?> buscarEstudiante(@RequestParam("id") Integer id){
-       Optional<EstudianteEntity> estudianteOptional = estudianteRepository.findById(id);
+       Optional<EstudianteEntity> estudianteOptional = estudianteService.buscarEstudiante(id);
     
         if (estudianteOptional.isPresent()) {
             EstudianteEntity estudiante = estudianteOptional.get();
@@ -50,7 +50,7 @@ public class EstudianteController {
      */
     @PostMapping("/guardar")
     public ResponseEntity<String> agregarEstudiante(@Valid @RequestBody EstudianteEntity estudianteEntity){
-        estudianteRepository.save(estudianteEntity);
+        estudianteService.guardar(estudianteEntity);
         return ResponseEntity.ok("Estudiante guardado exitosamente");
     }
 
@@ -59,10 +59,10 @@ public class EstudianteController {
      */
     @DeleteMapping("/eliminar")
     public ResponseEntity<String> elimiarEstudiante(@RequestParam("id") Integer id){
-        Optional<EstudianteEntity> estudianteOptional = estudianteRepository.findById(id);
+        Optional<EstudianteEntity> estudianteOptional = estudianteService.buscarEstudiante(id);
     
         if (estudianteOptional.isPresent()) {
-            estudianteRepository.deleteById(id);
+            estudianteService.borrar(id);
             return ResponseEntity.ok("Estudiante eliminado exitosamente");
         } else {
             String mensaje = "Estudiante con el id: " + id + " no encontrado";
@@ -75,18 +75,18 @@ public class EstudianteController {
      */
     @PutMapping("/editar")
     public ResponseEntity<String> editarEstudiante(@RequestParam("id") Integer id, @Valid @RequestBody EstudianteEntity estudianteActualizado){
-         Optional<EstudianteEntity> estudianteOptional = estudianteRepository.findById(id);
+         Optional<EstudianteEntity> estudianteOptional = estudianteService.buscarEstudiante(id);
         if (estudianteOptional.isPresent()) {
             EstudianteEntity estudianteExistente = estudianteOptional.get();
     
-           estudianteExistente.setNombre(estudianteActualizado.getNombre());
-           estudianteExistente.setApellido(estudianteActualizado.getApellido());
-           estudianteExistente.setNota1(estudianteActualizado.getNota1());
-           estudianteExistente.setNota2(estudianteActualizado.getNota2());
-           estudianteExistente.setNota3(estudianteActualizado.getNota3());
-           estudianteExistente.setFechaNacimiento(estudianteActualizado.getFechaNacimiento());
+            estudianteExistente.setNombre(estudianteActualizado.getNombre());
+            estudianteExistente.setApellido(estudianteActualizado.getApellido());
+            estudianteExistente.setNota1(estudianteActualizado.getNota1());
+            estudianteExistente.setNota2(estudianteActualizado.getNota2());
+            estudianteExistente.setNota3(estudianteActualizado.getNota3());
+            estudianteExistente.setFechaNacimiento(estudianteActualizado.getFechaNacimiento());
 
-            estudianteRepository.save(estudianteExistente);
+            estudianteService.guardar(estudianteExistente);
             return ResponseEntity.ok("Estudiante actualizado exitosamente");
 
         } else {
@@ -101,8 +101,8 @@ public class EstudianteController {
      */
     @GetMapping("/listar")
     public List<EstudianteEntity> listarEstudiantesPorEdadExacta(@RequestParam("edad") Integer edad){
-        List<EstudianteEntity> estudiantes = estudianteRepository.findByEdad(edad);
-        return estudiantes;   
+        return estudianteService.listarEstudiantesEdadExacta(edad);
+        
     }
 
     /*
@@ -110,8 +110,8 @@ public class EstudianteController {
      */
     @GetMapping("/listarMenores")
     public List<EstudianteEntity> listarEstudiantesMenores(@RequestParam("edad") Integer edad){
-        List<EstudianteEntity> estudiantes = estudianteRepository.findByEdadMenor(edad);
-        return estudiantes;
+        return estudianteService.listarEstudiantesEdadMenor(edad);
+        
     }
 
     /*
@@ -119,8 +119,7 @@ public class EstudianteController {
      */
     @GetMapping("/listarMayores")
     public List<EstudianteEntity> listarEstudiantesMayores(@RequestParam("edad") Integer edad){
-        List<EstudianteEntity> estudiantes = estudianteRepository.findByEdadMayor(edad);
-        return estudiantes;      
+        return estudianteService.listarEstudiantesEdadMayor(edad);
     }
 
     /*
@@ -128,8 +127,7 @@ public class EstudianteController {
      */
     @GetMapping("/listarNombre")
     public List<EstudianteEntity> listarEstudiantesCoincidenciaNombre(@RequestParam("nombre") String nombre){
-        List<EstudianteEntity> estudiantes = estudianteRepository.findByNombreContaining(nombre);
-        return estudiantes;
+        return estudianteService.listarEstudiantesNombre(nombre);
     }
 
     /*
@@ -137,8 +135,7 @@ public class EstudianteController {
      */
     @GetMapping("/listarApellido")
     public List<EstudianteEntity> listarEstudiantesCoincidenciaApellido(@RequestParam("apellido") String apellido){
-        List<EstudianteEntity> estudiantes = estudianteRepository.findByApellidoContaining(apellido);
-        return estudiantes;
+        return estudianteService.listarEstudiantesApellido(apellido);
     }
 
     /*
@@ -146,8 +143,7 @@ public class EstudianteController {
      */
     @GetMapping("/listarPromedio")
     public List<EstudianteEntity> listarEstudiantesPromedio(@RequestParam("promedio") Float promedio){
-        List<EstudianteEntity> estudiantes = estudianteRepository.findByPromedio(promedio);
-        return estudiantes;
+        return estudianteService.listarEstudiantesPromedio(promedio);
     }
 
     /*
@@ -155,8 +151,7 @@ public class EstudianteController {
      */
     @GetMapping("/listarPromedioMenor")
     public List<EstudianteEntity> listarEstudiantesPromedioMenor(@RequestParam("promedio") Float promedio){
-        List<EstudianteEntity> estudiantes = estudianteRepository.findByPromedioMenor(promedio);
-        return estudiantes;
+        return estudianteService.listarEstudiantesPromedioMenor(promedio);
     }
 
     /*
@@ -164,7 +159,6 @@ public class EstudianteController {
      */
     @GetMapping("/listarPromedioMayor")
     public List<EstudianteEntity> listarEstudiantesPromedioMayor(@RequestParam("promedio") Float promedio){
-        List<EstudianteEntity> estudiantes = estudianteRepository.findByPromedioMayor(promedio);
-        return estudiantes;
+        return estudianteService.listarEstudiantesPromedioMayor(promedio);
     }
 }

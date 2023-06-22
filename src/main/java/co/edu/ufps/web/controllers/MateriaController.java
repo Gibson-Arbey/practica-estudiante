@@ -20,22 +20,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import co.edu.ufps.web.entities.MateriaEntity;
-import co.edu.ufps.web.repositorios.MateriaRepository;
+import co.edu.ufps.web.services.MateriaService;
 
 @RestController
 @RequestMapping("/materia")
 @Validated
 public class MateriaController {
     
+
     @Autowired
-    MateriaRepository materiaRepository;
+    MateriaService materiaService;
 
     /*
      * Metodo para guardar una materia
      */
     @PostMapping("/guardar")
     public ResponseEntity<String> guardarMateria(@Valid @RequestBody MateriaEntity materiaEntity){
-        materiaRepository.save(materiaEntity);
+        materiaService.guardar(materiaEntity);
         return ResponseEntity.ok("Materia guardada exitosamente");
     }
 
@@ -44,7 +45,7 @@ public class MateriaController {
      */
     @GetMapping("/buscar")
     public ResponseEntity<?> buscarMateria(@RequestParam("id") Integer id){
-       Optional<MateriaEntity> materiaOptional = materiaRepository.findById(id);
+       Optional<MateriaEntity> materiaOptional = materiaService.buscarMateria(id);
     
         if (materiaOptional.isPresent()) {
             MateriaEntity materia = materiaOptional.get();
@@ -60,10 +61,10 @@ public class MateriaController {
      */
     @DeleteMapping("/eliminar")
     public ResponseEntity<String> elimiarMateria(@RequestParam("id") Integer id){
-        Optional<MateriaEntity> materiaOptional = materiaRepository.findById(id);
+        Optional<MateriaEntity> materiaOptional = materiaService.buscarMateria(id);
     
         if (materiaOptional.isPresent()) {
-            materiaRepository.deleteById(id);
+            materiaService.elimiarMateria(id);
             return ResponseEntity.ok("Materia eliminada exitosamente");
         } else {
             String mensaje = "Materia con id: " + id + " no encontrada";
@@ -76,13 +77,13 @@ public class MateriaController {
      */
     @PutMapping("/editar")
     public ResponseEntity<String> editarEstudiante(@RequestParam("id") Integer id, @Valid @RequestBody MateriaEntity materiaActualizada){
-         Optional<MateriaEntity> materiaOptional = materiaRepository.findById(id);
+         Optional<MateriaEntity> materiaOptional = materiaService.buscarMateria(id);
         if (materiaOptional.isPresent()) {
             MateriaEntity materiaExistente = materiaOptional.get();
     
             materiaExistente.setNombre(materiaActualizada.getNombre());
             materiaExistente.setCreditos(materiaActualizada.getCreditos());
-            materiaRepository.save(materiaExistente);
+            materiaService.guardar(materiaExistente);
 
             return ResponseEntity.ok("Materia actualizada exitosamente");
 
@@ -98,7 +99,7 @@ public class MateriaController {
      */
     @GetMapping("/listarCreditos")
     public List<MateriaEntity> listarMateriasCreditos(@RequestParam("creditos") Integer creditos){
-        return materiaRepository.findByCreditos(creditos);
+        return materiaService.listarMateriasCreditos(creditos);
     }
 
     /*
@@ -106,6 +107,6 @@ public class MateriaController {
      */
     @GetMapping("/listarNombre")
     public List<MateriaEntity> listarMateriasNombre(@RequestParam("nombre") String nombre){
-        return materiaRepository.findByNombreContaining(nombre);
+        return materiaService.listarMateriasNombre(nombre);
     }
 }
