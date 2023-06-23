@@ -62,4 +62,30 @@ public class CursoController {
         EstudianteEntity estudianteEntity = cursoService.buscarEstudiante(id);
         return cursoService.listarCursoEstudiante(estudianteEntity);
     }
+
+    /*
+     * Metodo para listar todos los cursos de una materia
+     */
+    @GetMapping("/listarCursoMateria/{id}")
+    public List<CursoEntity> listarCursoMateria(@PathVariable("id") Integer id){
+        MateriaEntity materiaEntity = cursoService.buscarMateria(id);
+        return cursoService.listarCursoMateria(materiaEntity);
+    }
+
+    /*
+     * Metodo para listar todos los grupos de un curso
+     */
+    @GetMapping("/listarCursoGrupo/{grupo}")
+    public List<CursoEntity> listarCursoGrupo(@PathVariable("grupo") String grupo){
+        return cursoService.listarCursoGrupo(grupo);
+    }
+
+    /*
+     * Meotodo para listar todos los cursos por jornada
+     */
+    @GetMapping("/listarCursoJornada/{id}")
+    public List<CursoEntity> listadoCursoJornada(@PathVariable("id") Integer id){
+        JornadaEntity jornadaEntity = cursoService.buscarJornada(id);
+        return cursoService.listarCursoJornada(jornadaEntity);
+    }
 }

@@ -55,9 +55,32 @@ public class CursoService {
         cursoRepository.save(cursoEntity);
     }
 
+    /*
+     * Metodo para listar todos los cursos en los que esta inscrito un estudiante
+     */
     public List<CursoEntity> listarCursoEstudiante(EstudianteEntity estudianteEntity){
         return cursoRepository.findByEstudianteEntity(estudianteEntity);
     }
+
+    /*
+     * Metodo para listar todos los cursos de una materia
+     */
+    public List<CursoEntity> listarCursoMateria(MateriaEntity materiaEntity){
+        return cursoRepository.findByMateriaEntity(materiaEntity);
+    }
     
+    /*
+     * Metodo para listar todos cursos que tengan el grupo que estan enviando
+     */
+    public List<CursoEntity> listarCursoGrupo(String grupo){
+        return cursoRepository.findByGrupo(grupo);
+    }
+
+    /*
+     * Metodo para listar todos los cursos segun su jornada
+     */
+    public List<CursoEntity> listarCursoJornada(JornadaEntity jornadaEntity){
+        return cursoRepository.findByJornadaEntity(jornadaEntity);
+    }
 
 }
